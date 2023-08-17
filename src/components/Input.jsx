@@ -6,7 +6,6 @@ import { arrayUnion, doc, serverTimestamp, Timestamp, updateDoc } from 'firebase
 import { db, storage } from '../firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-
 const Input = () => {
   const [text, setText] = useState('');
   const [img, setImg] = useState(null);
@@ -15,6 +14,11 @@ const Input = () => {
   const { data } = useContext(ChatContext);
 
   const handleSend = async () => {
+    if (!text.trim()) {
+      // Викидаємо з функції, якщо текст порожній або містить тільки пробіли
+      return;
+    }
+
     if (img) {
       const storageRef = ref(storage, uuid());
 
@@ -35,6 +39,7 @@ const Input = () => {
                 img: downloadURL,
               }),
             });
+            URL.revokeObjectURL(img);
           });
         },
       );
@@ -66,6 +71,7 @@ const Input = () => {
     setText('');
     setImg(null);
   };
+
   return (
     <div className="input">
       <input
@@ -82,7 +88,7 @@ const Input = () => {
           onChange={(e) => setImg(e.target.files[0])}
         />
         <label htmlFor="file">
-          <img src={Img} alt="" />
+          <img src={img ? URL.createObjectURL(img) : Img} alt="" />
         </label>
         <button onClick={handleSend}>Send</button>
       </div>

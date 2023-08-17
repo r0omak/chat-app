@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Add from '../img/addAvatar.png';
+import Google from '../img/google-icon.png';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -73,12 +74,18 @@ const Register = () => {
             <img src={Add} alt="" />
             <span>Add an avatar</span>
           </label>
-          <button disabled={loading}>Sign up</button>
+          <button disabled={loading} className="sign-up-btn">
+            Sign up
+          </button>
+          <button className="login-button">
+            <img src={Google} alt="" className="google" />
+            Sign up with Google
+          </button>
           {loading && 'Uploading and compressing the image please wait...'}
           {err && <span>Something went wrong</span>}
         </form>
         <p>
-          You do have an account? <Link to="/register">Login</Link>
+          You do have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
